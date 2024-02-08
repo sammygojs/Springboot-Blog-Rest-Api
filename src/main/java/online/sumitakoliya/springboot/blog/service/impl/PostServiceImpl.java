@@ -1,15 +1,18 @@
 package online.sumitakoliya.springboot.blog.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import online.sumitakoliya.springboot.blog.payload.PostDto;
 import online.sumitakoliya.springboot.blog.repository.PostRepository;
 import online.sumitakoliya.springboot.blog.service.PostService;
 import online.sumitakoliya.springboot.blog.entity.Post;
+import online.sumitakoliya.springboot.blog.exception.ResourceNotFoundException;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -57,6 +60,15 @@ public class PostServiceImpl implements PostService {
 		post.setDescription(postDto.getDescription());
 		post.setContent(postDto.getContent());
 		return post;
+	}
+
+	@Override
+	public PostDto getPostById(long id){
+//		Post post;
+		Post post = postRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post","id",id));
+		return mapToDto(post);
+//				.orElseThrow(()-> new ResourceNotFoundException("Post","id",id));
+//		return 
 	}
 
 }
