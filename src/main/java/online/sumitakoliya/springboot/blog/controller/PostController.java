@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import online.sumitakoliya.springboot.blog.payload.PostDto;
+import online.sumitakoliya.springboot.blog.payload.PostResponse;
 import online.sumitakoliya.springboot.blog.service.PostService;
 
 @RestController
@@ -37,7 +38,7 @@ public class PostController {
 
 	// get all posts rest api
 	@GetMapping
-	public List<PostDto> getAllPosts(
+	public PostResponse getAllPosts(
 			@RequestParam(value="pageNo", defaultValue="0", required=false)int pageNo,
 			@RequestParam(value="pageSize", defaultValue="10", required=false) int pageSize
 			) {

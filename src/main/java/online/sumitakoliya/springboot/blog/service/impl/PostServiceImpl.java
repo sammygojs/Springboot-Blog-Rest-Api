@@ -1,5 +1,6 @@
 package online.sumitakoliya.springboot.blog.service.impl;
 
+import online.sumitakoliya.springboot.blog.payload.PostResponse;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+	public PostResponse getAllPosts(int pageNo, int pageSize) {
 		//create pageable instance
 		Pageable pageable = PageRequest.of(pageNo, pageSize);
 		
@@ -49,7 +50,17 @@ public class PostServiceImpl implements PostService {
 		//get content for page object
 		List<Post>listOfPosts = posts.getContent();
 		
-		return listOfPosts.stream().map(post-> mapToDto(post)).collect(Collectors.toList());
+		List<PostDto> content = listOfPosts.stream().map(post-> mapToDto(post)).collect(Collectors.toList());
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setContent(content);
+		postResponse.setPageNo(pageNo);
+		postResponse.setPageSize(pageSize);
+		postResponse.setTotalElements(posts.getTotalElements());
+		postResponse.setTotalPages(posts.getTotalPages());
+		postResponse.setLast(posts.isLast());
+		
+		return postResponse;
 	}
 
 	private PostDto mapToDto(Post post) {
